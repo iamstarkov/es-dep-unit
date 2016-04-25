@@ -103,6 +103,16 @@ easyFixtureDep(`./folder`, './index.js', './folder/index.js'); /* {
   resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
 ```
 
+## Related
+
+* [es-deps][es-deps] — ECMAScript 2015+/CommonJS module dependencies array
+* [es-deps-from-string][es-deps-from-string] — ECMAScript 2015+/CommonJS module dependencies array from string
+* [es-deps-resolved][es-deps-resolved] — ECMAScript 2015+/CommonJS module dependencies resolved array
+
+[es-deps]: https://github.com/iamstarkov/es-deps
+[es-deps-from-string]: https://github.com/iamstarkov/es-deps-from-string
+[es-deps-resolved]: https://github.com/iamstarkov/es-deps-resolved
+
 ## License
 
 MIT © [Vladimir Starkov](https://iamstarkov.com)
