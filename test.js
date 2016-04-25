@@ -30,13 +30,6 @@ test('complicated shit', t => t.deepEqual(
     resolved: join(cwd(), './basic/first/second/index.js') }
 ));
 
-test('in path', t => t.deepEqual(
-  esDepUnitMock(['meow', 'purr'], null, null, './basic/first/second/index.js'),
-  { requested: null,
-    from: null,
-    resolved: join(cwd(), 'meow', 'purr', './basic/first/second/index.js') }
-));
-
 test('dont messup absolute paths', t => {
   t.deepEqual(
     esDepUnit(null, '/global/file.js', null).from,
@@ -47,6 +40,13 @@ test('dont messup absolute paths', t => {
     '/global/file.js'
   );
 });
+
+test('in path', t => t.deepEqual(
+  esDepUnitMock(['meow', 'purr'], null, null, './basic/first/second/index.js'),
+  { requested: null,
+    from: null,
+    resolved: join(cwd(), 'meow', 'purr', './basic/first/second/index.js') }
+  ));
 
 test('in path curried', t => t.deepEqual(
   esDepUnitMock(['meow', 'purr'])(null, null, './basic/first/second/index.js'),

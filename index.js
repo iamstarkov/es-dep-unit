@@ -15,21 +15,21 @@ const contract = R.curry((name, ctor, param) => R.unless(
   () => { throw new TypeError(errorText(name, ctor, param)); }
 )(param));
 
-const joinNullCwd = (inPathArr, file) =>
+const joinNullCwd = (inPathArray, file) =>
   R.ifElse(R.is(String),
     R.unless(pathIsAbsolute, R.pipe(
-      R.concat(inPathArr),
+      R.concat(inPathArray),
       R.prepend(process.cwd()),
       R.apply(join)
     )),
     R.always(null)
   )(file);
 
-const esDepUnitMock = R.curry((inPathArr, requested, from, resolved) => {
-  contract('inPathArr', Array, inPathArr);
+const esDepUnitMock = R.curry((inPathArray, requested, from, resolved) => {
+  contract('inPathArray', Array, inPathArray);
   return { requested,
-    from: joinNullCwd(inPathArr, from),
-    resolved: joinNullCwd(inPathArr, resolved) };
+    from: joinNullCwd(inPathArray, from),
+    resolved: joinNullCwd(inPathArray, resolved) };
 });
 
 const esDepUnit = esDepUnitMock([]);

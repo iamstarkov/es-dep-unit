@@ -31,34 +31,77 @@ esDepUnit(null, null, '/global/file.js'); // { requested: null, from: null, reso
 esDepUnit(null, './file.js', null); // { requested: null, from: '/Users/iamstarkov/projects/es-dep-unit/file.js', resolved: null }
 esDepUnit(null, null, './file.js'); // { requested: null, from: null, resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' }
 
+// full es-dep-unit
 esDepUnit('./file.js', './index.js', './file.js'); /* {
   requested: './file.js',
   from: '/Users/iamstarkov/projects/es-dep-unit/index.js',
   resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' } */
 
-
-esDepUnitMock(['fixtures', 'testcase'], '')
+// mocked es-dep-unit for fixtures in 'easy' testcase
+esDepUnitMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
+  requested: './folder',
+  from: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/index.js',
+  resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
 ```
 
 ## API
 
+* esDepUnit
+* esDepUnitMock
+
 ### esDepUnit(requested, from, resolved)
 
-#### input
+Transform input arguments into objects prefixing `from` and `resolved` with `process.cwd()`;
+
+Function is curried.
+
+#### requested
 
 *Required*  
-Type: `String` or `null`
+Type: `String` or `null`  
+Examples: `./file.js`, `./folder`, `/global/file.js`, `/global/folder` or `package`.
+Examples: `null` for app entry point.
 
-Lorem ipsum.
+How does this dependency had been **requested**.  
+Every string you can paste into `require` or `import` statement.
 
-#### options
+#### from
 
-##### foo
+*Required*  
+Type: `String` or `null`   
+Examples: `./file.js` or `/global/file.js`.
+Examples: `null` for app entry point.
 
-Type: `Boolean`  
-Default: `false`
+**From** which absolutely resolved file this dependency had been requested.
 
-Lorem ipsum.
+#### requested
+
+*Required*  
+Type: `String` or `null`  
+Examples: `./file.js` or `/global/file.js`.
+Examples: `null` if dependency was not resolved.
+
+Absolute path for **resolved** dependency.
+
+### esDepUnitMock(inPathArray, requested, from, resolved)
+
+Helper for mocking dependencies in different folders for testing purposes. Also curried.
+Transform input arguments into objects prefixing `from` and `resolved` with `process.cwd()` and `path.join(inPathArray)` in between.
+
+```js
+esDepUnitMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
+  requested: './folder',
+  from: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/index.js',
+  resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
+
+// curried usage
+const easyFixtureDep = esDepUnitMock(['fixtures', 'easy']);
+
+easyFixtureDep(`./folder`, './index.js', './folder/index.js'); /* {
+  requested: './folder',
+  from: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/index.js',
+  resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
+```
 
 ## License
 
