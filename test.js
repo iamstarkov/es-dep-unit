@@ -1,3 +1,4 @@
+
 import test from 'ava';
 import { esDepUnit, esDepUnitMock } from './index';
 
@@ -54,3 +55,5 @@ test('in path curried', t => t.deepEqual(
     from: null,
     resolved: join(cwd(), 'meow', 'purr', './basic/first/second/index.js') }
 ));
+
+test('invalid imput', t => t.throws(() => { esDepUnitMock(2, null, null, null); }, TypeError));
