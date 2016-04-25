@@ -1,15 +1,56 @@
 import test from 'ava';
-import { esDepUnit, esDepUnitAsync } from './index';
+import esDepUnit from './index';
 
-test('basic', t =>
-  t.is(esDepUnit('unicorns'), 'unicorns'));
+import { join } from 'path';
+const { cwd } = process;
 
-test('empty input', t => t.throws(() => { esDepUnit(); }, TypeError));
-test('invalid input', t => t.throws(() => { esDepUnit(2); }, TypeError));
+test('null', t => t.deepEqual(
+  esDepUnit([], null, null, null),
+  { from: null, requested: null, resolved: null }
+));
 
-test('async :: basic', async t => t.is(
-  await esDepUnitAsync('unicorns'),
-  'unicorns'));
+test('requested', t => t.deepEqual(
+  esDepUnit([], 'q', null, null).requested, 'q'
+));
 
-test('async :: empty input', t => t.throws(esDepUnitAsync(), TypeError));
-test('async :: invalid input', t => t.throws(esDepUnitAsync(2), TypeError));
+test('from', t => t.deepEqual(
+  esDepUnit([], null, './m.js', null).from,
+  join(cwd(), './m.js')
+));
+
+test('resolved', t => t.deepEqual(
+  esDepUnit([], null, null, './m.js').resolved,
+  join(cwd(), './m.js')
+));
+
+test('complicated shit', t => t.deepEqual(
+  esDepUnit([], null, null, './basic/first/second/index.js'),
+  { requested: null,
+    from: null,
+    resolved: join(cwd(), './basic/first/second/index.js') }
+));
+
+test('in path', t => t.deepEqual(
+  esDepUnit(['meow', 'purr'], null, null, './basic/first/second/index.js'),
+  { requested: null,
+    from: null,
+    resolved: join(cwd(), 'meow', 'purr', './basic/first/second/index.js') }
+));
+
+test('dont messup absolute paths', t => {
+  t.deepEqual(
+    esDepUnit([], null, '/global/file.js', null).from,
+    '/global/file.js'
+  );
+  t.deepEqual(
+    esDepUnit([], null, null, '/global/file.js').resolved,
+    '/global/file.js'
+  );
+});
+
+test('in path curried', t => t.deepEqual(
+  esDepUnit(['meow', 'purr'])(null, null, './basic/first/second/index.js'),
+  { requested: null,
+    from: null,
+    resolved: join(cwd(), 'meow', 'purr', './basic/first/second/index.js') }
+));
