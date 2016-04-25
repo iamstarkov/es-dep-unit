@@ -3,6 +3,7 @@ import R from 'ramda';
 import { join } from 'path';
 import pathIsAbsolute from 'path-is-absolute';
 
+// String -> Constructor -> a -> String
 const errorText = (name, ctor, param) => {
   const expected = R.type(ctor());
   const got = R.type(param);
@@ -15,6 +16,7 @@ const contract = R.curry((name, ctor, param) => R.unless(
   () => { throw new TypeError(errorText(name, ctor, param)); }
 )(param));
 
+// joinNullCwd :: Array[String] -> String|null -> String|null
 const joinNullCwd = (inPathArray, file) =>
   R.ifElse(R.is(String),
     R.unless(pathIsAbsolute, R.pipe(
@@ -25,6 +27,7 @@ const joinNullCwd = (inPathArray, file) =>
     R.always(null)
   )(file);
 
+// esDepUnitMock :: Array[String] -> String|null -> String|null -> String|null -> Object
 const esDepUnitMock = R.curry((inPathArray, requested, from, resolved) => {
   contract('inPathArray', Array, inPathArray);
   return { requested,
@@ -32,6 +35,7 @@ const esDepUnitMock = R.curry((inPathArray, requested, from, resolved) => {
     resolved: joinNullCwd(inPathArray, resolved) };
 });
 
+// esDepUnitMock :: String|null -> String|null -> String|null -> Object
 const esDepUnit = esDepUnitMock([]);
 
 export { esDepUnit, esDepUnitMock };
