@@ -15,24 +15,26 @@ const contract = R.curry((name, ctor, param) => R.unless(
   () => { throw new TypeError(errorText(name, ctor, param)); }
 )(param));
 
-const { cwd } = process;
-
 const joinNullCwd = (inPathArr, file) =>
-  R.ifElse(
-    R.is(String),
+  R.ifElse(R.is(String),
     R.unless(pathIsAbsolute, R.pipe(
-      R.append(R.__, inPathArr),
-      R.prepend(cwd()),
+      R.concat(inPathArr),
+      R.prepend(process.cwd()),
       R.apply(join)
     )),
-    R.always(null))(file);
+    R.always(null)
+  )(file);
 
-const dep = R.curry((inPathArr, requested, from, resolved) => {
+const esDepUnitMock = R.curry((inPathArr, requested, from, resolved) => {
   contract('inPathArr', Array, inPathArr);
-
+  // contract('requested', [String, null], requested);
+  // contract('from', [String, null], from);
+  // contract('resolved', [String, null], resolved);
   return { requested,
     from: joinNullCwd(inPathArr, from),
     resolved: joinNullCwd(inPathArr, resolved) };
 });
 
-export default dep;
+const esDepUnit = esDepUnitMock([]);
+
+export { esDepUnit, esDepUnitMock };
