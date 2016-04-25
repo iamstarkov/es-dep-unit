@@ -27,9 +27,6 @@ const joinNullCwd = (inPathArr, file) =>
 
 const esDepUnitMock = R.curry((inPathArr, requested, from, resolved) => {
   contract('inPathArr', Array, inPathArr);
-  // contract('requested', [String, null], requested);
-  // contract('from', [String, null], from);
-  // contract('resolved', [String, null], resolved);
   return { requested,
     from: joinNullCwd(inPathArr, from),
     resolved: joinNullCwd(inPathArr, resolved) };

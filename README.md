@@ -15,25 +15,39 @@
 ## Usage
 
 ```js
-import { esDepUnit, esDepUnitAsync } from 'es-dep-unit';
+import { esDepUnit, esDepUnitMock } from 'es-dep-unit';
 
-esDepUnit('unicorns'); // unicorns
-esDepUnitAsync('unicorns')
-  .then(result => console.log(result)); // unicorns
+// if null nothing will happen
+esDepUnit(null, null, null); // { requested: null, from: null, resolved: null }
+
+// requested field is not processed anyhow
+esDepUnit('./file.js', null, null); // { requested: './file.js', from: null, resolved: null }
+
+// if `from` or `resolved` are absolute paths, they are not processed anyhow too
+esDepUnit(null, '/global/file.js', null); // { requested: null, from: '/global/file.js', resolved: null }
+esDepUnit(null, null, '/global/file.js'); // { requested: null, from: null, resolved: '/global/file.js' }
+
+// if `from` or `resolved` are not absolute paths, they are prefixed with `process.cwd()`
+esDepUnit(null, './file.js', null); // { requested: null, from: '/Users/iamstarkov/projects/es-dep-unit/file.js', resolved: null }
+esDepUnit(null, null, './file.js'); // { requested: null, from: null, resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' }
+
+esDepUnit('./file.js', './index.js', './file.js'); /* {
+  requested: './file.js',
+  from: '/Users/iamstarkov/projects/es-dep-unit/index.js',
+  resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' } */
+
+
+esDepUnitMock(['fixtures', 'testcase'], '')
 ```
 
 ## API
 
-### esDepUnit(input, [options])
-
-### esDepUnitAsync(input, [options])
-
-Return a promise that resolves to `result`.
+### esDepUnit(requested, from, resolved)
 
 #### input
 
 *Required*  
-Type: `String`
+Type: `String` or `null`
 
 Lorem ipsum.
 
