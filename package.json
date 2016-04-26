@@ -1,6 +1,6 @@
 {
   "name": "es-dep-unit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Constructor for ECMAScript 2015+/CommonJS dependency unit `Object { requested, from, resolved }`",
   "main": "index.es5.js",
   "jsnext:main": "index.js",
