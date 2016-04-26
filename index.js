@@ -2,19 +2,7 @@
 import R from 'ramda';
 import { join } from 'path';
 import pathIsAbsolute from 'path-is-absolute';
-
-// String -> Constructor -> a -> String
-const errorText = (name, ctor, param) => {
-  const expected = R.type(ctor());
-  const got = R.type(param);
-  return `\`${name}\` should be \`${expected}\`, but got \`${got}\``;
-};
-
-// contract :: String -> Constructor -> a
-const contract = R.curry((name, ctor, param) => R.unless(
-  R.is(ctor),
-  () => { throw new TypeError(errorText(name, ctor, param)); }
-)(param));
+import contract from 'neat-contract';
 
 // joinNullCwd :: Array[String] -> String|null -> String|null
 const joinNullCwd = (inPathArray, file) =>
