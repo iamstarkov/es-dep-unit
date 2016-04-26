@@ -61,6 +61,7 @@
     "rimraf": "^2.5.2"
   },
   "dependencies": {
+    "is-builtin-module": "^1.0.0",
     "neat-contract": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "ramda": "^0.21.0"

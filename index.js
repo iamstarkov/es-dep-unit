@@ -2,18 +2,17 @@
 import R from 'ramda';
 import { join } from 'path';
 import pathIsAbsolute from 'path-is-absolute';
+import isBuiltinModule from 'is-builtin-module';
 import contract from 'neat-contract';
 
 // joinNullCwd :: Array[String] -> String|null -> String|null
-const joinNullCwd = (inPathArray, file) =>
-  R.ifElse(R.is(String),
-    R.unless(pathIsAbsolute, R.pipe(
-      R.concat(inPathArray),
-      R.prepend(process.cwd()),
-      R.apply(join)
-    )),
-    R.always(null)
-  )(file);
+const joinNullCwd = (inPathArray, file) => R.cond([
+  [R.isNil, R.identity],
+  [isBuiltinModule, R.identity],
+  [pathIsAbsolute, R.identity],
+  [R.is(String), R.pipe(R.concat(inPathArray), R.prepend(process.cwd()), R.apply(join))],
+  [R.T, R.always(null)],
+])(file);
 
 // esDepUnitMock :: Array[String] -> String|null -> String|null -> String|null -> Object
 const esDepUnitMock = R.curry((inPathArray, requested, from, resolved) => {

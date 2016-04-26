@@ -42,6 +42,13 @@ test('dont messup absolute paths', t => {
   );
 });
 
+test('dont messup built-in modules', t => {
+  t.deepEqual(
+    esDepUnit('path', 'index.js', 'path'),
+    { requested: 'path', from: join(cwd(), 'index.js'), resolved: 'path' }
+  );
+});
+
 test('in path', t => t.deepEqual(
   esDepUnitMock(['meow', 'purr'], null, null, './basic/first/second/index.js'),
   { requested: null,
