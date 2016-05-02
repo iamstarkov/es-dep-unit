@@ -15,7 +15,7 @@
 ## Usage
 
 ```js
-import dep, { mock as depMock } from './index';
+import dep, { mock as depMock } from 'es-dep-unit';
 
 // if null nothing will happen
 dep(null, null, null); // { requested: null, from: null, resolved: null }
