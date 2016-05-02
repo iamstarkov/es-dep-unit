@@ -15,30 +15,30 @@
 ## Usage
 
 ```js
-import { esDepUnit, esDepUnitMock } from 'es-dep-unit';
+import dep, { mock as depMock } from './index';
 
 // if null nothing will happen
-esDepUnit(null, null, null); // { requested: null, from: null, resolved: null }
+dep(null, null, null); // { requested: null, from: null, resolved: null }
 
 // requested field is not processed anyhow
-esDepUnit('./file.js', null, null); // { requested: './file.js', from: null, resolved: null }
+dep('./file.js', null, null); // { requested: './file.js', from: null, resolved: null }
 
 // if `from` or `resolved` are absolute paths, they are not processed anyhow too
-esDepUnit(null, '/global/file.js', null); // { requested: null, from: '/global/file.js', resolved: null }
-esDepUnit(null, null, '/global/file.js'); // { requested: null, from: null, resolved: '/global/file.js' }
+dep(null, '/global/file.js', null); // { requested: null, from: '/global/file.js', resolved: null }
+dep(null, null, '/global/file.js'); // { requested: null, from: null, resolved: '/global/file.js' }
 
 // if `from` or `resolved` are not absolute paths, they are prefixed with `process.cwd()`
-esDepUnit(null, './file.js', null); // { requested: null, from: '/Users/iamstarkov/projects/es-dep-unit/file.js', resolved: null }
-esDepUnit(null, null, './file.js'); // { requested: null, from: null, resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' }
+dep(null, './file.js', null); // { requested: null, from: '/Users/iamstarkov/projects/es-dep-unit/file.js', resolved: null }
+dep(null, null, './file.js'); // { requested: null, from: null, resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' }
 
 // full es-dep-unit
-esDepUnit('./file.js', './index.js', './file.js'); /* {
+dep('./file.js', './index.js', './file.js'); /* {
   requested: './file.js',
   from: '/Users/iamstarkov/projects/es-dep-unit/index.js',
   resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' } */
 
 // mocked es-dep-unit for fixtures in 'easy' testcase
-esDepUnitMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
+depMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
   requested: './folder',
   from: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/index.js',
   resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
@@ -46,10 +46,10 @@ esDepUnitMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js
 
 ## API
 
-* esDepUnit
-* esDepUnitMock
+* dep
+* dep.mock
 
-### esDepUnit(requested, from, resolved)
+### dep(requested, from, resolved)
 
 Transform input arguments into objects prefixing `from` and `resolved` with `process.cwd()`;
 
@@ -74,7 +74,7 @@ Examples: `null` for app entry point.
 
 **From** which absolutely resolved file this dependency had been requested.
 
-#### requested
+#### resolved
 
 *Required*  
 Type: `String` or `null`  
@@ -83,19 +83,19 @@ Examples: `null` if dependency was not resolved.
 
 Absolute path for **resolved** dependency.
 
-### esDepUnitMock(inPathArray, requested, from, resolved)
+### dep.mock(inPathArray, requested, from, resolved)
 
 Helper for mocking dependencies in different folders for testing purposes. Also curried.
 Transform input arguments into objects prefixing `from` and `resolved` with `process.cwd()` and `path.join(inPathArray)` in between.
 
 ```js
-esDepUnitMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
+dep.mock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
   requested: './folder',
   from: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/index.js',
   resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
 
 // curried usage
-const easyFixtureDep = esDepUnitMock(['fixtures', 'easy']);
+const easyFixtureDep = dep.mock(['fixtures', 'easy']);
 
 easyFixtureDep(`./folder`, './index.js', './folder/index.js'); /* {
   requested: './folder',
