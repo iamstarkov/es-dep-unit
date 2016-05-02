@@ -25,4 +25,5 @@ const esDepUnitMock = R.curry((inPathArray, requested, from, resolved) => {
 // esDepUnitMock :: String|null -> String|null -> String|null -> Object
 const esDepUnit = esDepUnitMock([]);
 
-export { esDepUnit, esDepUnitMock };
+esDepUnit.depMock = esDepUnitMock;
+export default esDepUnit;
