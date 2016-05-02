@@ -108,10 +108,14 @@ easyFixtureDep(`./folder`, './index.js', './folder/index.js'); /* {
 * [es-deps][es-deps] — ECMAScript 2015+/CommonJS module dependencies array
 * [es-deps-from-string][es-deps-from-string] — ECMAScript 2015+/CommonJS module dependencies array from string
 * [es-deps-resolved][es-deps-resolved] — ECMAScript 2015+/CommonJS module dependencies resolved array
+* [es-deps-deep][es-deps-deep] — ECMAScript 2015+/CommonJS module dependencies resolved in depth
+* [es-dep-kit][es-dep-kit] — ECMAScript 2015+/CommonJS module dependencies helpers kit
 
 [es-deps]: https://github.com/iamstarkov/es-deps
 [es-deps-from-string]: https://github.com/iamstarkov/es-deps-from-string
 [es-deps-resolved]: https://github.com/iamstarkov/es-deps-resolved
+[es-deps-deep]: https://github.com/iamstarkov/es-deps-deep
+[es-dep-kit]: https://github.com/iamstarkov/es-dep-kit
 
 ## License
 
