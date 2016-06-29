@@ -5,25 +5,32 @@ import pathIsAbsolute from 'path-is-absolute';
 import isBuiltinModule from 'is-builtin-module';
 import contract from 'neat-contract';
 
-// joinNullCwd :: Array[String] -> String|null -> String|null
-const joinNullCwd = (inPathArray, file) => R.cond([
+
+// processProp :: [String] -> (String|null -> String|null)
+const processProp = R.memoize(prePath => R.cond([
   [R.isNil, R.identity],
   [isBuiltinModule, R.identity],
   [pathIsAbsolute, R.identity],
-  [R.is(String), R.pipe(R.concat(inPathArray), R.prepend(process.cwd()), R.apply(join))],
+  [R.is(String), R.partial(join, [prePath])],
   [R.T, R.always(null)],
-])(file);
+]));
 
-// esDepUnitMock :: Array[String] -> String|null -> String|null -> String|null -> Object
-const esDepUnitMock = R.curry((inPathArray, requested, from, resolved) => {
-  contract('inPathArray', Array, inPathArray);
-  return { requested,
-    from: joinNullCwd(inPathArray, from),
-    resolved: joinNullCwd(inPathArray, resolved) };
-});
 
-// esDepUnitMock :: String|null -> String|null -> String|null -> Object
-const esDepUnit = esDepUnitMock([]);
+// esDepUnitMock :: String -> String|null -> String|null -> String|null -> Object
+function esDepUnitMock(prePath, requested, from, resolved) {
+  contract('prePath', String, prePath);
+  const transformations = {
+    requested: R.identity,
+    from: processProp(prePath),
+    resolved: processProp(prePath),
+  };
+  return R.evolve(transformations, { requested, from, resolved });
+}
 
-esDepUnit.mock = esDepUnitMock;
+
+// esDepUnit :: String|null -> String|null -> String|null -> Object
+const esDepUnit = R.partial(esDepUnitMock, ['']);
+
+esDepUnit.mock = R.curry(esDepUnitMock);
+
 export default esDepUnit;

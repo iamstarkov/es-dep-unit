@@ -27,6 +27,8 @@ dep('./file.js', null, null); // { requested: './file.js', from: null, resolved:
 dep(null, '/global/file.js', null); // { requested: null, from: '/global/file.js', resolved: null }
 dep(null, null, '/global/file.js'); // { requested: null, from: null, resolved: '/global/file.js' }
 
+// if `from` or `resolved` are built-in modules ('fs', 'path', etc) they are not processed anyhow too
+
 // if `from` or `resolved` are not absolute paths, they are prefixed with `process.cwd()`
 dep(null, './file.js', null); // { requested: null, from: '/Users/iamstarkov/projects/es-dep-unit/file.js', resolved: null }
 dep(null, null, './file.js'); // { requested: null, from: null, resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' }
@@ -37,8 +39,8 @@ dep('./file.js', './index.js', './file.js'); /* {
   from: '/Users/iamstarkov/projects/es-dep-unit/index.js',
   resolved: '/Users/iamstarkov/projects/es-dep-unit/file.js' } */
 
-// mocked es-dep-unit for fixtures in 'easy' testcase
-depMock(['fixtures', 'easy'], `./folder`, './index.js', './folder/index.js'); /* {
+// mocked es-dep-unit for fixtures in 'easy' test case
+depMock(join(__dirname, 'fixtures', 'easy'), `./folder`, './index.js', './folder/index.js'); /* {
   requested: './folder',
   from: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/index.js',
   resolved: '/Users/iamstarkov/projects/es-dep-unit/fixtures/easy/folder/index.js' } */
