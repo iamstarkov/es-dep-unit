@@ -1,5 +1,7 @@
 # es-dep-unit
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/iamstarkov/es-dep-unit.svg)](https://greenkeeper.io/)
+
 [![NPM version][npm-image]][npm-url]
 [![Unix Build Status][travis-image]][travis-url]
 [![Windows Build Status][appveyor-image]][appveyor-url]
